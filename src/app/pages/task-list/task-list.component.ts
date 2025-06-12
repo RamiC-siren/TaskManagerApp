@@ -1,53 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent implements OnInit{
-  tasks: Task[] = [];
-  isLoading = true;
+export class TaskListComponent implements OnInit, AfterViewInit {
+  dataSource = new MatTableDataSource<Task>([]);
+  displayedColumns: string[] = ['id', 'title', 'completed', 'actions'];
   loading = true;
 
-  constructor(private taskService: TaskService){
+  @ViewChild('topPaginator') topPaginator!: MatPaginator;
+  @ViewChild('bottomPaginator') bottomPaginator!: MatPaginator;
 
-    
-  }
+  constructor(
+    private taskService: TaskService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.taskService.getTasks().subscribe({
       next: (tasks) => {
-        setTimeout(() => { // artificial delay
-        this.tasks = tasks;
-        this.loading = false;
-      }, 1000); // 1 second delay
-      },
-      error: (err) => {
-        console.error('Error fetching tasks', err);
-        this.isLoading = false;
+        setTimeout(() => {
+          this.dataSource.data = tasks;
+          this.loading = false;
+
+          // Wait for Angular to render paginators
+          this.cdr.detectChanges();
+
+          // Assign primary paginator
+          this.dataSource.paginator = this.topPaginator;
+
+          // Sync both paginators
+          this.topPaginator.page.subscribe(() => {
+            this.syncPaginator(this.topPaginator, this.bottomPaginator);
+          });
+
+          this.bottomPaginator.page.subscribe(() => {
+            this.syncPaginator(this.bottomPaginator, this.topPaginator);
+          });
+        }, 1000); // Simulate loading delay
       }
     });
   }
 
-  deleteTask(id: number): void {
+  ngAfterViewInit(): void {
+    // This ensures ViewChild is ready — handled more reliably now
+    this.cdr.detectChanges();
+  }
+
+  syncPaginator(source: MatPaginator, target: MatPaginator) {
+    if (!target) return;
+    target.pageIndex = source.pageIndex;
+    target.pageSize = source.pageSize;
+    target.length = source.length;
+  }
+
+
+  deleteTask(id: number) {
   const confirmed = confirm('Are you sure you want to delete this task?');
 
   if (confirmed) {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
-        // Remove task from list locally after successful delete
-        this.tasks = this.tasks.filter(task => task.id !== id);
-        console.log(`Task ${id} deleted.`);
+        // Update UI by removing from dataSource
+        this.dataSource.data = this.dataSource.data.filter(task => task.id !== id);
       },
       error: (err) => {
-        console.error('Error deleting task:', err);
+        console.error('Delete failed', err);
+        alert('Failed to delete task.');
       }
     });
   }
 }
+
 
   
 

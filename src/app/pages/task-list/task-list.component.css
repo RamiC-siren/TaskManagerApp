@@ -75,6 +75,10 @@ td mat-icon-button:hover {
   overflow: hidden;
   background: white;
 }
+mat-paginator {
+  margin-top: 16px;
+}
+
 
 
 

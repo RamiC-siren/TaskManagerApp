@@ -9,6 +9,7 @@ import { AddTaskComponent } from './pages/add-task/add-task.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MaterialModule } from './material.module';
     ReactiveFormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
