@@ -1,0 +1,22 @@
+<div class="container">
+    <mat-card>
+  <h2>Add Task</h2>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Task Title</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error *ngIf="taskForm.get('title')?.invalid">Title is required</mat-error>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="completed">Completed</mat-checkbox>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Adding...' : 'Add Task' }}
+      </button>
+    </div>
+  </form>
+</mat-card>
+
+</div>

@@ -1,1 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.container {
+  max-width: 800px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+button[mat-raised-button],
+button[mat-button] {
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+
+mat-card {
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  background-color: #eeeeee;
+}
+
+.mat-cell,
+.mat-header-cell {
+  padding: 12px;
+}
+
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  table {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,28 @@
+<div class="container">
+    <mat-card>
+  <h2>Edit Task</h2>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <!-- Task Title Input -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Task Title</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error *ngIf="taskForm.get('title')?.invalid">
+        Title is required
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Completed Checkbox -->
+    <mat-checkbox formControlName="completed">Completed</mat-checkbox>
+
+    <!-- Form Actions -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+      </button>
+      <button mat-button color="warn" routerLink="/">Cancel</button>
+    </div>
+  </form>
+</mat-card>
+
+</div>
